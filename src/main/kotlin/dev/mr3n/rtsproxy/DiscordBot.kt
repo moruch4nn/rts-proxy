@@ -2,29 +2,13 @@ package dev.mr3n.rtsproxy
 
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.events.session.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import net.dv8tion.jda.api.interactions.components.buttons.Button
 import net.dv8tion.jda.api.interactions.components.text.TextInput
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
 import net.dv8tion.jda.api.interactions.modals.Modal
 
 
 class DiscordBot : ListenerAdapter() {
-    override fun onReady(event: ReadyEvent) {
-        val channel = event.jda.getTextChannelById(System.getenv("LINK_ACCOUNT_CHANNEL_ID"))?:return
-        channel.getHistoryFromBeginning(100).queue { history ->
-            val messages = history.retrievedHistory
-            if(messages.size == 1) {
-                channel.deleteMessageById(messages[0].id).queue()
-            } else {
-                channel.deleteMessagesByIds(messages.map { it.id }).queue()
-            }
-            val message = "**マインクラフトと連携する**\nマインクラフトと連携することで人狼イベントの自動通話移動などスムーズなイベント進行が可能になります。\n\n**連携方法**\nアカウントと連携するには`rts.mr3n.dev`に接続し、認証コードを取得します。\n次に下の__マインクラフトと連携する__ボタンを押し、6ケタの認証コードを送信してください。"
-            channel.sendMessage(message).addActionRow(Button.primary("connect-mc-account-button", "マインクラフトと連携する")).queue()
-        }
-    }
-
     override fun onModalInteraction(event: ModalInteractionEvent) {
         when(event.modalId) {
             "connect-mc-account-modal" -> {
