@@ -1,0 +1,5 @@
+{
+  "id": "rtsproxy",
+  "name": "RTSProxy",
+  "main": "dev.mr3n.rtsproxy.RTSProxy"
+}
