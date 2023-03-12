@@ -69,7 +69,7 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
 
     val codes = mutableMapOf<UUID, String>()
     val usernames = mutableMapOf<UUID, String>()
-
+    
     @Subscribe
     fun on(event: ProxyShutdownEvent) { registration.remove() }
 
@@ -113,14 +113,10 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
             var authCode: String
             do { authCode = List(6) {"0123456789".random()}.joinToString("") } while (this.codes.containsValue(authCode))
             authCode
-        }
-        val titleLine = Component.text("RedTownServer", Style.style(TextColor.color(237, 28, 36)))
+      }
+        val reason = Component.text("RedTownServer", Style.style(TextColor.color(237, 28, 36)))
             .append(Component.text(" - ", Style.style(TextColor.color(79, 79, 79))))
             .append(Component.text("DiscordIDと連携してください。\n", Style.style(TextColor.color(255, 255, 255))))
-        val warningLine = Component.text("RedTownServer(通称RTS)に参加するには\n", Style.style(TextColor.color(170, 170, 170)))
-            .append(Component.text("MinecraftとDiscordIDを", Style.style(TextColor.color(170, 170, 170))))
-            .append(Component.text("連携する必要があります。\n", Style.style(TextColor.color(170, 170, 170), TextDecoration.UNDERLINED)))
-        val howtoLine = Component.text("<-- 連携方法 -->\n", Style.style(TextColor.color(232, 60, 60)))
             .append(Component.text("1.", Style.style(TextColor.color(232, 60, 60))))
             .append(Component.text("公式Discord鯖の", Style.style(TextColor.color(170, 170, 170))))
             .append(Component.text("#アカウント連携", Style.style(TextColor.color(153, 170, 181))))
@@ -133,18 +129,9 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
             .append(Component.text("[マインクラフトと連携する]", Style.style(TextColor.color(71, 82, 196), TextDecoration.UNDERLINED)))
             .append(Component.text("ボタンをクリック\n", Style.style(TextColor.color(170, 170, 170))))
             .append(Component.text("3.", Style.style(TextColor.color(232, 60, 60))))
-            .append(Component.text("下に表示されている6ケタの", Style.style(TextColor.color(170, 170, 170))))
-            .append(Component.text("認証コード", Style.style(TextColor.color(232, 60, 60))))
-            .append(Component.text("を送信し、認証を完了する\n", Style.style(TextColor.color(170, 170, 170))))
-        val codeLine = Component.text("認証コード: ", Style.style(TextColor.color(232, 60, 60)))
-            .append(Component.text(authCode, Style.style(TextColor.color(232, 60, 60), TextDecoration.UNDERLINED, TextDecoration.BOLD)))
-        // 上で生成したメッセージを結合する
-        val reason = titleLine.append(Component.text("\n"))
-            .append(warningLine)
-            .append(Component.text("\n"))
-            .append(howtoLine)
-            .append(Component.text("\n"))
-            .append(codeLine)
+            .append(Component.text("認証コード(", Style.style(TextColor.color(170, 170, 170))))
+            .append(Component.text(authCode, Style.style(TextColor.color(232, 60, 60))))
+            .append(Component.text(")を送信して認証を完了\n", Style.style(TextColor.color(170, 170, 170))))
         event.result = ResultedEvent.ComponentResult.denied(reason)
     }
 
