@@ -1,7 +1,9 @@
 package dev.mr3n.rtsproxy
 
+import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
+import net.dv8tion.jda.api.events.session.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.interactions.components.text.TextInput
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
@@ -9,6 +11,13 @@ import net.dv8tion.jda.api.interactions.modals.Modal
 
 
 class DiscordBot : ListenerAdapter() {
+
+    private var authedRole: Role? = null
+
+    override fun onReady(event: ReadyEvent) {
+        this.authedRole = event.jda.getRoleById(System.getenv("AUTHED_ROLE_ID"))
+    }
+
     override fun onModalInteraction(event: ModalInteractionEvent) {
         when(event.modalId) {
             "connect-mc-account-modal" -> {
@@ -54,6 +63,7 @@ class DiscordBot : ListenerAdapter() {
                                 .document("$uniqueId")
                                 .set(userInfo)
                         }
+                        authedRole?.let { role -> event.guild?.addRoleToMember(event.user,role)?.queue() }
                         val message = """${username}との連携が完了しました。"""
                         RTSProxy.INSTANCE.codes.remove(uniqueId)
                         event.reply(message).setEphemeral(true).queue()
