@@ -93,7 +93,8 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
             "uuid" to event.player.uniqueId.toString(),
             "name" to event.player.username,
             "ip" to event.player.remoteAddress.address.hostAddress,
-            "verified" to true
+            "verified" to true,
+            "lastLogin" to Date()
         )
         if(this.users.containsKey(event.player.uniqueId)) {
             db.collection("users").document("${event.player.uniqueId}").update(request)
