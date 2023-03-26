@@ -92,8 +92,9 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
         val request = mapOf(
             "uuid" to event.player.uniqueId.toString(),
             "name" to event.player.username,
-            "ip" to event.player.remoteAddress.hostName,
-            "verified" to true
+            "ip" to event.player.remoteAddress.address.hostAddress,
+            "verified" to true,
+            "lastLogin" to Date()
         )
         if(this.users.containsKey(event.player.uniqueId)) {
             db.collection("users").document("${event.player.uniqueId}").update(request)
@@ -121,7 +122,7 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
             .append(Component.text("公式Discord鯖の", Style.style(TextColor.color(170, 170, 170))))
             .append(Component.text("#アカウント連携", Style.style(TextColor.color(153, 170, 181))))
             .append(
-                Component.text("(bit.ly/a-rts)", Style.style(TextColor.color(170, 170, 170), TextDecoration.UNDERLINED)).clickEvent(
+                Component.text("(https://bit.ly/a-rts)", Style.style(TextColor.color(170, 170, 170), TextDecoration.UNDERLINED)).clickEvent(
                 ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, "https://bit.ly/a-rts")))
             .append(Component.text("にアクセス\n", Style.style(TextColor.color(170, 170, 170))))
             .append(Component.text("2.", Style.style(TextColor.color(232, 60, 60))))
