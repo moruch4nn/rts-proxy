@@ -69,7 +69,7 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
 
     val codes = mutableMapOf<UUID, String>()
     val usernames = mutableMapOf<UUID, String>()
-    
+
     @Subscribe
     fun on(event: ProxyShutdownEvent) { registration.remove() }
 
@@ -116,7 +116,7 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
       }
         val reason = Component.text("RedTownServer", Style.style(TextColor.color(237, 28, 36)))
             .append(Component.text(" - ", Style.style(TextColor.color(79, 79, 79))))
-            .append(Component.text("DiscordIDと連携してください。\n", Style.style(TextColor.color(255, 255, 255))))
+            .append(Component.text("Discordアカウントと連携する方法\n", Style.style(TextColor.color(255, 255, 255))))
             .append(Component.text("1.", Style.style(TextColor.color(232, 60, 60))))
             .append(Component.text("公式Discord鯖の", Style.style(TextColor.color(170, 170, 170))))
             .append(Component.text("#アカウント連携", Style.style(TextColor.color(153, 170, 181))))

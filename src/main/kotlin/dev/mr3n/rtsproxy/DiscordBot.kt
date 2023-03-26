@@ -57,7 +57,7 @@ class DiscordBot : ListenerAdapter() {
                         val message = """${username}との連携が完了しました。"""
                         RTSProxy.INSTANCE.codes.remove(uniqueId)
                         event.reply(message).setEphemeral(true).queue()
-                    }
+                        event.member?.mute(false)?.queue()                    }
                 }
             }
         }
