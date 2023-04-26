@@ -1,6 +1,9 @@
 # rts-proxy
 RTSのサーバープロキシに必要な機能を追加するためのプラグインです。
 
+## 依存関係
+vTunnelForVelocity: https://github.com/moruch4nn/vTunnel
+
 ## 追加機能
 
 ### Discord認証機能

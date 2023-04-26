@@ -10,6 +10,7 @@ import com.velocitypowered.api.command.CommandSource
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.RegisteredServer
 import com.velocitypowered.api.proxy.server.ServerInfo
+import dev.mr3n.vtunnel.VTunnel
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.Style
@@ -33,10 +34,7 @@ object DefaultServerCommand {
                                 ctx.source.sendMessage(Component.text("$server というサーバーは存在していません。", Style.style(TextColor.color(254,0,0))))
                                 return@executes Command.SINGLE_SUCCESS
                             } else {
-                                val servers = proxy.configuration::class.java.getDeclaredField("servers")
-                                    .apply { isAccessible = true }.get(proxy.configuration)
-                                servers::class.java.getDeclaredMethod("setAttemptConnectionOrder", List::class.java)
-                                    .apply { isAccessible = true }.invoke(servers, listOf(server))
+                                VTunnel.tryFirst[0] = server
                                 ctx.source.sendMessage(Component.text("デフォルトサーバーを $server に変更しました。", Style.style(TextColor.color(0,254,0))))
                                 return@executes Command.SINGLE_SUCCESS
                             }
