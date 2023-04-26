@@ -9,6 +9,7 @@ import com.velocitypowered.api.event.ResultedEvent
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.LoginEvent
 import com.velocitypowered.api.event.connection.PostLoginEvent
+import com.velocitypowered.api.event.connection.PreLoginEvent
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Plugin
@@ -85,6 +86,17 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
             .enableIntents(GatewayIntent.GUILD_MESSAGE_REACTIONS)
             .addEventListeners(DiscordBot())
             .build()
+    }
+
+    @Subscribe
+    fun on(event: PreLoginEvent) {
+        if(!RateLimiter.check()) {
+            val message = Component.text(" - アクセスが集中しています - ", TextColor.color(255,0,0))
+            message.append(Component.text("現在サーバーへの異常な量のトラフィックが検出されたため"))
+            message.append(Component.text("一時的にサーバーへの接続を制限しています。"))
+            message.append(Component.text("数秒後にもう一度接続し直してください。"))
+            event.result = PreLoginEvent.PreLoginComponentResult.denied(message)
+        }
     }
 
     @Subscribe
