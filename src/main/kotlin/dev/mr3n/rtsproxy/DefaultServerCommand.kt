@@ -9,6 +9,7 @@ import com.velocitypowered.api.command.CommandSource
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.server.RegisteredServer
 import com.velocitypowered.api.proxy.server.ServerInfo
+import dev.mr3n.vtunnel.VTunnel
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
@@ -30,18 +31,16 @@ object DefaultServerCommand {
                                 ctx.source.sendMessage(Component.text("$server というサーバーは存在していません。", Style.style(TextColor.color(254,0,0))))
                                 return@executes Command.SINGLE_SUCCESS
                             } else {
-                                val servers = proxy.configuration::class.java.getDeclaredField("servers")
-                                    .apply { isAccessible = true }.get(proxy.configuration)
-                                servers::class.java.getDeclaredMethod("setAttemptConnectionOrder", List::class.java)
-                                    .apply { isAccessible = true }.invoke(servers, listOf(server))
-                                ctx.source.sendMessage(Component.text("デフォルトサーバーを $server に変更しました。", Style.style(TextColor.color(0,254,0))))
+                                val old = VTunnel.tryFirst.removeFirstOrNull()
+                                VTunnel.tryFirst.add(0, server)
+                                ctx.source.sendMessage(Component.text("デフォルトサーバーを $old から $server に変更しました。", Style.style(TextColor.color(0,254,0))))
                                 return@executes Command.SINGLE_SUCCESS
                             }
                         })
             ).then(
                 LiteralArgumentBuilder.literal<CommandSource?>("get")
                     .executes { ctx ->
-                        ctx.source.sendMessage(Component.text("現在のデフォルトサーバーは ${proxy.configuration.attemptConnectionOrder.getOrNull(0)} です。", Style.style(TextColor.color(0,254,0))))
+                        ctx.source.sendMessage(Component.text("現在のデフォルトサーバーは ${VTunnel.tryFirst.firstOrNull()?:proxy.configuration.attemptConnectionOrder.getOrNull(0)} です。", Style.style(TextColor.color(0,254,0))))
                         return@executes Command.SINGLE_SUCCESS
                     }
             ).build()

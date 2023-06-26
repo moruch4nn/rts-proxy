@@ -12,10 +12,12 @@ import com.velocitypowered.api.event.connection.PostLoginEvent
 import com.velocitypowered.api.event.connection.PreLoginEvent
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
+import com.velocitypowered.api.plugin.Dependency
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
 import dev.mr3n.rtsproxy.model.User
+import dev.mr3n.vtunnel.VTunnel
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.kyori.adventure.text.Component
@@ -27,7 +29,7 @@ import java.nio.file.Path
 import java.util.*
 import kotlin.collections.set
 
-@Plugin(id = "rtsproxy", name = "RTS Proxy")
+@Plugin(id = "rtsproxy", name = "RTS Proxy", dependencies = [Dependency(id = "vtunnel")])
 class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirectory val dataDirectory: Path) {
 
     init { INSTANCE = this }
@@ -104,7 +106,7 @@ class RTSProxy @Inject constructor(private val server: ProxyServer, @DataDirecto
         val request = mapOf(
             "uuid" to event.player.uniqueId.toString(),
             "name" to event.player.username,
-            "ip" to event.player.remoteAddress.address.hostAddress,
+            "ip" to (VTunnel.getIpAddress(event.player.username)?.address?.hostAddress?:"UNKNOWN"),
             "verified" to true,
             "lastLogin" to Date()
         )
